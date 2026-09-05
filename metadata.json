@@ -1,0 +1,6 @@
+{
+  "name": "EduPulse LMS",
+  "description": "Modern, role-based Learning Management System for Classes 1–12 with Student, Teacher, and Management portals.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
