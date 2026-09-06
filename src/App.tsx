@@ -14,6 +14,10 @@ import { AssignmentsView } from './components/student/AssignmentsView';
 import { ExamsView } from './components/student/ExamsView';
 import { ResultsView } from './components/student/ResultsView';
 import { CertificatesView } from './components/student/CertificatesView';
+import { LiveClassesView } from './components/student/LiveClassesView';
+import { StudentAttendanceView } from './components/student/StudentAttendanceView';
+import { StudentFeesView } from './components/student/StudentFeesView';
+import { StudentMessagesView } from './components/student/StudentMessagesView';
 
 // Teacher views
 import { TeacherDashboard } from './components/teacher/TeacherDashboard';
@@ -23,6 +27,8 @@ import { TeacherAssignmentsView } from './components/teacher/TeacherAssignmentsV
 import { QuestionBankView } from './components/teacher/QuestionBankView';
 import { AttendanceView } from './components/teacher/AttendanceView';
 import { TeacherPerformanceView } from './components/teacher/TeacherPerformanceView';
+import { TeacherDoubtsView } from './components/teacher/TeacherDoubtsView';
+import { TeacherLiveStudioView } from './components/teacher/TeacherLiveStudioView';
 
 // Admin views
 import { AdminDashboard } from './components/admin/AdminDashboard';
@@ -52,12 +58,27 @@ const MainContent: React.FC = () => {
         return <MyCoursesView />;
       case 'course-player':
         return <CoursePlayerView />;
+      case 'live-classes':
+        if (currentRole === 'teacher') return <TeacherLiveStudioView />;
+        return <LiveClassesView />;
       case 'assignments':
+        if (currentRole === 'teacher') return <TeacherAssignmentsView />;
         return <AssignmentsView />;
       case 'exams':
+        if (currentRole === 'teacher') return <QuestionBankView />;
         return <ExamsView />;
       case 'results':
+        if (currentRole === 'teacher') return <TeacherPerformanceView />;
         return <ResultsView />;
+      case 'student-attendance':
+        if (currentRole === 'teacher') return <AttendanceView />;
+        return <StudentAttendanceView />;
+      case 'student-fees':
+        if (currentRole === 'student') return <StudentDashboard />;
+        return <FeesManagementView />;
+      case 'student-messages':
+        if (currentRole === 'teacher') return <TeacherDoubtsView />;
+        return <StudentMessagesView />;
       case 'certificates':
         return <CertificatesView />;
 
@@ -72,8 +93,12 @@ const MainContent: React.FC = () => {
         return <TeacherAssignmentsView />;
       case 'question-bank':
         return <QuestionBankView />;
+      case 'teacher-live-classes':
+        return <TeacherLiveStudioView />;
       case 'attendance':
         return <AttendanceView />;
+      case 'teacher-doubts':
+        return <TeacherDoubtsView />;
       case 'teacher-performance':
         return <TeacherPerformanceView />;
 

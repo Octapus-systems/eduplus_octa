@@ -105,13 +105,14 @@ export const StudentDashboard: React.FC = () => {
         />
         <MetricCard
           id="metric-attendance"
-          title="Attendance"
+          title="Attendance Integrity"
           value="96.4%"
           subtext="48 of 50 Days Present"
           icon={CheckCircle2}
           iconColor="text-emerald-600"
           iconBg="bg-emerald-50"
           trend={{ value: '+1.8% vs Term Avg', isPositive: true }}
+          onClick={() => setActiveTab('student-attendance')}
         />
         <MetricCard
           id="metric-pending-tasks"
