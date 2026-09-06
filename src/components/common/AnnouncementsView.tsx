@@ -74,6 +74,15 @@ export const AnnouncementsView: React.FC = () => {
         )}
       </div>
 
+      {/* Filter and Search Bar */}
+      <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-xs text-slate-500 font-medium">
+            Active Campus Circulars ({announcements.length})
+          </span>
+        </div>
+      </div>
+
       {/* Announcements List */}
       <div className="space-y-4">
         {announcements.map((item) => (

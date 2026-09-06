@@ -28,6 +28,7 @@ import { TeacherPerformanceView } from './components/teacher/TeacherPerformanceV
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { StudentManagementView } from './components/admin/StudentManagementView';
 import { TeacherManagementView } from './components/admin/TeacherManagementView';
+import { ClassesCoursesView } from './components/admin/ClassesCoursesView';
 import { ExamManagementView } from './components/admin/ExamManagementView';
 import { FeesManagementView } from './components/admin/FeesManagementView';
 import { ReportsAnalyticsView } from './components/admin/ReportsAnalyticsView';
@@ -43,7 +44,10 @@ const MainContent: React.FC = () => {
     switch (activeTab) {
       // Student Tabs
       case 'student-dashboard':
-        return <StudentDashboard />;
+      case 'dashboard':
+        if (currentRole === 'student') return <StudentDashboard />;
+        if (currentRole === 'teacher') return <TeacherDashboard />;
+        return <AdminDashboard />;
       case 'courses':
         return <MyCoursesView />;
       case 'course-player':
@@ -77,17 +81,24 @@ const MainContent: React.FC = () => {
       case 'admin-dashboard':
         return <AdminDashboard />;
       case 'student-management':
+      case 'student-mgmt':
         return <StudentManagementView />;
       case 'teacher-management':
+      case 'teacher-mgmt':
         return <TeacherManagementView />;
       case 'admin-courses':
-        return <MyCoursesView />;
+      case 'course-mgmt':
+        return <ClassesCoursesView />;
       case 'exam-management':
+      case 'exam-mgmt':
         return <ExamManagementView />;
       case 'fees':
+      case 'fees-mgmt':
         return <FeesManagementView />;
       case 'reports':
         return <ReportsAnalyticsView />;
+      case 'admin-settings':
+        return <ProfileSettingsView />;
 
       // Shared Tabs
       case 'announcements':
