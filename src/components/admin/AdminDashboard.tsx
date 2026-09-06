@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLms } from '../../context/LmsContext';
 import { MetricCard } from '../common/MetricCard';
 import {
@@ -24,10 +24,14 @@ import {
   ArrowRight,
   ShieldCheck,
   Building,
-  School
+  School,
+  Bot
 } from 'lucide-react';
+import { AdminChatbot } from './AdminChatbot';
 
 export const AdminDashboard: React.FC = () => {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
   const {
     students,
     teachers,
@@ -82,6 +86,12 @@ export const AdminDashboard: React.FC = () => {
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5">
+          <button
+            onClick={() => setIsChatOpen(true)}
+            className="px-4 py-2.5 bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-200 font-bold text-xs rounded-xl border border-indigo-400/30 shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
+          >
+            <Bot className="w-4 h-4 text-indigo-300" /> AI Assistant Demo
+          </button>
           <button
             onClick={() => setActiveTab('student-management')}
             className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
@@ -142,6 +152,9 @@ export const AdminDashboard: React.FC = () => {
           onClick={() => setActiveTab('reports')}
         />
       </div>
+
+      {/* Floating Pop-Up Admin AI Assistant Chatbot Demo */}
+      <AdminChatbot isOpenExternal={isChatOpen} onToggleExternal={setIsChatOpen} />
 
       {/* Analytics Charts Bento Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

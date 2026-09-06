@@ -157,16 +157,22 @@ export interface AttendanceSession {
 
 export interface FeeRecord {
   id: string;
+  invoiceNumber?: string;
   studentId: string;
   studentName: string;
   grade: GradeLevel;
-  section: string;
+  studentGrade?: GradeLevel;
+  section?: string;
+  feeType?: string;
+  amount?: number;
   totalFee: number;
   paidAmount: number;
   dueAmount: number;
   dueDate: string;
   status: 'paid' | 'partial' | 'pending' | 'overdue';
   lastPaymentDate?: string;
+  paidAt?: string;
+  paymentMethod?: string;
 }
 
 export interface Certificate {

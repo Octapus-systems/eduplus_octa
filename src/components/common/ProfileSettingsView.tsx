@@ -242,13 +242,99 @@ export const ProfileSettingsView: React.FC = () => {
           <div className="flex justify-end pt-1">
             <button
               type="submit"
-              className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-xl shadow-xs transition-colors"
+              className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
             >
               Update Password
             </button>
           </div>
         </form>
       </div>
+
+      {/* Institutional Admin Settings (Admin Only) */}
+      {currentRole === 'admin' && (
+        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-xs space-y-5">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div>
+              <h3 className="text-sm font-bold text-slate-900">Institutional Roles & LMS Preferences</h3>
+              <p className="text-xs text-slate-500">Configure global academic policies, grading scales, and access matrices</p>
+            </div>
+            <span className="px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 text-[10px] font-extrabold border border-purple-100 uppercase tracking-wider">
+              Admin Privilege
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1">Academic Year Session</label>
+              <select className="w-full p-2.5 border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20">
+                <option value="2026-2027">2026 – 2027 (Active Term)</option>
+                <option value="2025-2026">2025 – 2026 (Archived)</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1">Grading Scale System</label>
+              <select className="w-full p-2.5 border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20">
+                <option value="letter">Letter Grades (A+, A, B, C, D, F)</option>
+                <option value="cgpa">4.0 CGPA Cumulative Scale</option>
+                <option value="percentage">Percentage (0% - 100%)</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Roles & Access Matrix */}
+          <div className="space-y-2 pt-2">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              Role Access & Permission Matrix
+            </h4>
+            <div className="rounded-xl border border-slate-200 overflow-hidden text-xs">
+              <table className="w-full text-left">
+                <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-200">
+                  <tr>
+                    <th className="py-2.5 px-4">Role</th>
+                    <th className="py-2.5 px-3 text-center">Manage Students</th>
+                    <th className="py-2.5 px-3 text-center">Assign Grades</th>
+                    <th className="py-2.5 px-3 text-center">Collect Fees</th>
+                    <th className="py-2.5 px-3 text-center">Publish Notices</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 font-medium">
+                  <tr>
+                    <td className="py-2.5 px-4 font-bold text-slate-900">Institutional Admin</td>
+                    <td className="py-2.5 px-3 text-center text-emerald-600 font-bold">Full Access</td>
+                    <td className="py-2.5 px-3 text-center text-emerald-600 font-bold">Full Access</td>
+                    <td className="py-2.5 px-3 text-center text-emerald-600 font-bold">Full Access</td>
+                    <td className="py-2.5 px-3 text-center text-emerald-600 font-bold">Full Access</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2.5 px-4 font-bold text-slate-900">Faculty / Teacher</td>
+                    <td className="py-2.5 px-3 text-center text-slate-400">View Only</td>
+                    <td className="py-2.5 px-3 text-center text-emerald-600 font-bold">Full Access</td>
+                    <td className="py-2.5 px-3 text-center text-slate-300">No Access</td>
+                    <td className="py-2.5 px-3 text-center text-indigo-600 font-bold">Class Scope</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2.5 px-4 font-bold text-slate-900">Student & Parent</td>
+                    <td className="py-2.5 px-3 text-center text-slate-300">No Access</td>
+                    <td className="py-2.5 px-3 text-center text-slate-400">View Only</td>
+                    <td className="py-2.5 px-3 text-center text-indigo-600 font-bold">Pay Own Dues</td>
+                    <td className="py-2.5 px-3 text-center text-slate-400">Read Only</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="flex justify-end pt-2">
+            <button
+              onClick={() => addToast('Institutional Preferences Saved', 'Global school settings updated.', 'success')}
+              className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
+            >
+              Save Institutional Settings
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

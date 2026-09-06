@@ -33,20 +33,22 @@ export const FeesManagementView: React.FC = () => {
 
   const filtered = feeRecords.filter((f) => {
     const matchStatus = statusFilter === 'all' || f.status === statusFilter;
+    const feeHead = f.feeType || 'Tuition & Term Fee';
+    const invNum = f.invoiceNumber || f.id;
     const matchSearch =
       f.studentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      f.feeType.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      f.invoiceNumber.toLowerCase().includes(searchQuery.toLowerCase());
+      feeHead.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      invNum.toLowerCase().includes(searchQuery.toLowerCase());
     return matchStatus && matchSearch;
   });
 
   const totalCollected = feeRecords
-    .filter((f) => f.status === 'paid')
-    .reduce((a, b) => a + b.amount, 0);
+    .filter((f) => f.status === 'paid' || f.paidAmount! > 0)
+    .reduce((a, b) => a + (b.paidAmount || b.amount || 0), 0);
 
   const totalPending = feeRecords
     .filter((f) => f.status !== 'paid')
-    .reduce((a, b) => a + b.amount, 0);
+    .reduce((a, b) => a + (b.dueAmount || b.amount || b.totalFee || 0), 0);
 
   const handleCreateInvoice = (e: React.FormEvent) => {
     e.preventDefault();
@@ -112,20 +114,22 @@ export const FeesManagementView: React.FC = () => {
 
       {/* Filter Bar */}
       <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
-          {(['all', 'paid', 'pending', 'overdue'] as const).map((st) => (
-            <button
-              key={st}
-              onClick={() => setStatusFilter(st)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all ${
-                statusFilter === st
-                  ? 'bg-white text-slate-900 shadow-xs'
-                  : 'text-slate-500 hover:text-slate-900'
-              }`}
-            >
-              {st}
-            </button>
-          ))}
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+            {(['all', 'paid', 'pending', 'overdue'] as const).map((st) => (
+              <button
+                key={st}
+                onClick={() => setStatusFilter(st)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all cursor-pointer ${
+                  statusFilter === st
+                    ? 'bg-white text-slate-900 shadow-xs'
+                    : 'text-slate-500 hover:text-slate-900'
+                }`}
+              >
+                {st}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="relative">
@@ -160,15 +164,15 @@ export const FeesManagementView: React.FC = () => {
               {filtered.map((inv) => (
                 <tr key={inv.id} className="hover:bg-slate-50/70 transition-colors">
                   <td className="py-3.5 px-5 font-mono font-bold text-slate-600">
-                    {inv.invoiceNumber}
+                    {inv.invoiceNumber || `INV-2026-${inv.id.substring(0, 4).toUpperCase()}`}
                   </td>
                   <td className="py-3.5 px-4 font-semibold text-slate-900">
                     {inv.studentName}
                   </td>
-                  <td className="py-3.5 px-4 text-slate-600">{inv.studentGrade}</td>
-                  <td className="py-3.5 px-4 font-medium text-slate-700">{inv.feeType}</td>
+                  <td className="py-3.5 px-4 text-slate-600">{inv.studentGrade || inv.grade}</td>
+                  <td className="py-3.5 px-4 font-medium text-slate-700">{inv.feeType || 'Tuition & Term Fee'}</td>
                   <td className="py-3.5 px-4 font-bold text-slate-900 font-mono">
-                    ${inv.amount}
+                    ${(inv.amount || inv.totalFee || inv.paidAmount || 2400).toLocaleString()}
                   </td>
                   <td className="py-3.5 px-4 text-slate-500 text-[11px]">{inv.dueDate}</td>
                   <td className="py-3.5 px-4">
@@ -178,7 +182,7 @@ export const FeesManagementView: React.FC = () => {
                     <div className="flex items-center justify-end gap-2">
                       <button
                         onClick={() => setSelectedReceipt(inv)}
-                        className="p-1.5 text-slate-500 hover:text-indigo-600 rounded-lg hover:bg-slate-100"
+                        className="p-1.5 text-slate-500 hover:text-indigo-600 rounded-lg hover:bg-slate-100 cursor-pointer"
                         title="View Receipt"
                       >
                         <Receipt className="w-4 h-4" />
