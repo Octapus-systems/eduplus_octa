@@ -1,4 +1,4 @@
-export type UserRole = 'student' | 'teacher' | 'admin';
+export type UserRole = 'student' | 'teacher' | 'admin' | 'parent';
 
 export type GradeLevel = 
   | 'Class 1' | 'Class 2' | 'Class 3' | 'Class 4' | 'Class 5'
@@ -325,3 +325,115 @@ export interface StudentBehaviorRemark {
   note: string;
   parentNotified: boolean;
 }
+
+export interface ParentChild {
+  id: string;
+  name: string;
+  avatar: string;
+  grade: GradeLevel;
+  section: string;
+  rollNumber: string;
+  admissionId: string;
+  dob: string;
+  house: string;
+  classTeacherName: string;
+  classTeacherAvatar: string;
+  classTeacherEmail: string;
+  attendancePercentage: number;
+  gpa: number;
+  feeStatus: 'paid' | 'pending' | 'overdue';
+  pendingFeeAmount: number;
+  unsubmittedAssignments: number;
+  upcomingExamsCount: number;
+  conductRating: string;
+}
+
+export interface ParentTeacherMeeting {
+  id: string;
+  studentId: string;
+  teacherId: string;
+  teacherName: string;
+  teacherAvatar: string;
+  subject: string;
+  requestedDate: string;
+  requestedTime: string;
+  mode: 'in_person' | 'video_call';
+  agenda: string;
+  status: 'confirmed' | 'pending' | 'completed' | 'rescheduled';
+  meetingLink?: string;
+  venue?: string;
+  teacherNotes?: string;
+}
+
+export interface TeacherReview {
+  id: string;
+  teacherId: string;
+  teacherName: string;
+  subject: string;
+  rating: number; // 1-5
+  feedbackText: string;
+  category: 'teaching_quality' | 'communication' | 'supportiveness';
+  submittedAt: string;
+  anonymous: boolean;
+}
+
+export interface StudentDocument {
+  id: string;
+  studentId: string;
+  title: string;
+  category: 'report_card' | 'certificate' | 'fee_receipt' | 'conduct' | 'medical';
+  issueDate: string;
+  fileSize: string;
+  downloadUrl?: string;
+}
+
+export interface TransportDetail {
+  studentId: string;
+  busNumber: string;
+  routeName: string;
+  pickupLocation: string;
+  dropLocation: string;
+  pickupTime: string;
+  dropTime: string;
+  driverName: string;
+  driverPhone: string;
+  status: 'on_schedule' | 'delayed' | 'boarding';
+}
+
+export interface LibraryBookItem {
+  id: string;
+  studentId: string;
+  bookTitle: string;
+  author: string;
+  isbn: string;
+  issueDate: string;
+  dueDate: string;
+  status: 'issued' | 'overdue' | 'returned';
+  fineAmount: number;
+}
+
+export interface ParentLeaveRequest {
+  id: string;
+  studentId: string;
+  studentName: string;
+  startDate: string;
+  endDate: string;
+  reasonCategory: 'sick_leave' | 'family_event' | 'medical_appointment' | 'personal';
+  reasonDetails: string;
+  submittedAt: string;
+  status: 'pending' | 'approved' | 'rejected';
+  teacherRemarks?: string;
+}
+
+export interface ParentSupportTicket {
+  id: string;
+  ticketNumber: string;
+  category: 'academic' | 'billing' | 'transport' | 'technical';
+  subject: string;
+  description: string;
+  priority: 'normal' | 'urgent';
+  createdAt: string;
+  status: 'open' | 'in_progress' | 'resolved';
+  response?: string;
+}
+

@@ -39,6 +39,21 @@ import { ExamManagementView } from './components/admin/ExamManagementView';
 import { FeesManagementView } from './components/admin/FeesManagementView';
 import { ReportsAnalyticsView } from './components/admin/ReportsAnalyticsView';
 
+// Parent views
+import { ParentDashboard } from './components/parent/ParentDashboard';
+import { ChildrenDirectoryView } from './components/parent/ChildrenDirectoryView';
+import { ParentAcademicsView } from './components/parent/ParentAcademicsView';
+import { ParentExamsResultsView } from './components/parent/ParentExamsResultsView';
+import { ParentAssignmentsView } from './components/parent/ParentAssignmentsView';
+import { ParentAttendanceView } from './components/parent/ParentAttendanceView';
+import { ParentFeesView } from './components/parent/ParentFeesView';
+import { ParentTeacherConnectView } from './components/parent/ParentTeacherConnectView';
+import { ParentAIAssistantView } from './components/parent/ParentAIAssistantView';
+import { ParentAchievementsView } from './components/parent/ParentAchievementsView';
+import { ParentEventsTimetableComponents } from './components/parent/ParentEventsTimetableComponents';
+import { ParentDocumentsSupportView } from './components/parent/ParentDocumentsSupportView';
+import { ParentSettingsView } from './components/parent/ParentSettingsView';
+
 // Shared views
 import { AnnouncementsView } from './components/common/AnnouncementsView';
 import { ProfileSettingsView } from './components/common/ProfileSettingsView';
@@ -53,7 +68,36 @@ const MainContent: React.FC = () => {
       case 'dashboard':
         if (currentRole === 'student') return <StudentDashboard />;
         if (currentRole === 'teacher') return <TeacherDashboard />;
+        if (currentRole === 'parent') return <ParentDashboard />;
         return <AdminDashboard />;
+
+      // Parent Tabs
+      case 'parent-dashboard':
+        return <ParentDashboard />;
+      case 'parent-children':
+        return <ChildrenDirectoryView />;
+      case 'parent-academics':
+        return <ParentAcademicsView />;
+      case 'parent-attendance':
+        return <ParentAttendanceView />;
+      case 'parent-assignments':
+        return <ParentAssignmentsView />;
+      case 'parent-exams':
+        return <ParentExamsResultsView />;
+      case 'parent-fees':
+        return <ParentFeesView />;
+      case 'parent-teachers':
+        return <ParentTeacherConnectView />;
+      case 'parent-ai':
+        return <ParentAIAssistantView />;
+      case 'parent-achievements':
+        return <ParentAchievementsView />;
+      case 'parent-events':
+        return <ParentEventsTimetableComponents />;
+      case 'parent-documents':
+        return <ParentDocumentsSupportView />;
+      case 'parent-settings':
+        return <ParentSettingsView />;
       case 'courses':
         return <MyCoursesView />;
       case 'course-player':

@@ -55,12 +55,22 @@ export const MobileNav: React.FC = () => {
     { key: 'admin-settings', label: 'Config', icon: Settings }
   ];
 
+  const parentBottomNav = [
+    { key: 'parent-dashboard', label: 'Home', icon: LayoutDashboard },
+    { key: 'parent-children', label: 'Children', icon: Users },
+    { key: 'parent-academics', label: 'Academics', icon: GraduationCap },
+    { key: 'parent-fees', label: 'Fees', icon: FileCheck2 },
+    { key: 'parent-settings', label: 'Profile', icon: Settings }
+  ];
+
   const bottomItems =
     currentRole === 'student'
       ? studentBottomNav
       : currentRole === 'teacher'
       ? teacherBottomNav
-      : adminBottomNav;
+      : currentRole === 'admin'
+      ? adminBottomNav
+      : parentBottomNav;
 
   return (
     <>

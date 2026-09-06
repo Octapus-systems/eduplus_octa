@@ -7,6 +7,7 @@ import {
   GraduationCap,
   Briefcase,
   Shield,
+  Users,
   Menu,
   Check,
   ExternalLink,
@@ -142,6 +143,18 @@ export const Header: React.FC = () => {
           >
             <Shield className="w-3.5 h-3.5" />
             Admin
+          </button>
+          <button
+            id="switch-role-parent"
+            onClick={() => setRole('parent')}
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
+              currentRole === 'parent'
+                ? 'bg-white text-amber-700 shadow-xs'
+                : 'text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <Users className="w-3.5 h-3.5" />
+            Parent
           </button>
         </div>
 

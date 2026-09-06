@@ -18,7 +18,15 @@ import {
   ChatMessage,
   StudentDoubt,
   LessonPlan,
-  TeachingMaterial
+  TeachingMaterial,
+  ParentChild,
+  ParentTeacherMeeting,
+  TeacherReview,
+  StudentDocument,
+  TransportDetail,
+  LibraryBookItem,
+  ParentLeaveRequest,
+  ParentSupportTicket
 } from '../types';
 import {
   mockUsers,
@@ -39,7 +47,15 @@ import {
   mockStudentMessages,
   mockStudentDoubts,
   mockLessonPlans,
-  mockTeachingMaterials
+  mockTeachingMaterials,
+  mockChildrenList,
+  mockParentMeetings,
+  mockTeacherReviews,
+  mockStudentDocuments,
+  mockTransportInfo,
+  mockLibraryBooks,
+  mockLeaveRequests,
+  mockSupportTickets
 } from '../data/mockData';
 
 export interface Toast {
@@ -90,6 +106,17 @@ interface LmsContextType {
   studentDoubts: StudentDoubt[];
   lessonPlans: LessonPlan[];
   teachingMaterials: TeachingMaterial[];
+  childrenList: ParentChild[];
+  selectedChildId: string;
+  setSelectedChildId: (id: string) => void;
+  selectedChild: ParentChild;
+  parentMeetings: ParentTeacherMeeting[];
+  teacherReviews: TeacherReview[];
+  studentDocuments: StudentDocument[];
+  transportInfo: Record<string, TransportDetail>;
+  libraryBooks: LibraryBookItem[];
+  leaveRequests: ParentLeaveRequest[];
+  supportTickets: ParentSupportTicket[];
 
   // Interactive mutations
   submitAssignment: (assignmentId: string, fileName: string, notes: string) => void;
@@ -113,6 +140,11 @@ interface LmsContextType {
   saveLessonPlan: (plan: Omit<LessonPlan, 'id'>) => void;
   uploadTeachingMaterial: (material: Omit<TeachingMaterial, 'id' | 'uploadedAt'>) => void;
   scheduleLiveClass: (liveClassData: Omit<LiveClass, 'id'>) => void;
+  bookParentTeacherMeeting: (meeting: Omit<ParentTeacherMeeting, 'id' | 'status'>) => void;
+  submitTeacherReview: (review: Omit<TeacherReview, 'id' | 'submittedAt'>) => void;
+  payChildFee: (childId: string, amount: number, paymentMethod: string) => void;
+  submitLeaveRequest: (req: Omit<ParentLeaveRequest, 'id' | 'submittedAt' | 'status'>) => void;
+  submitSupportTicket: (ticket: Omit<ParentSupportTicket, 'id' | 'ticketNumber' | 'createdAt' | 'status'>) => void;
 
   // UI state
   toasts: Toast[];
@@ -162,6 +194,19 @@ export const LmsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [studentDoubts, setStudentDoubts] = useState<StudentDoubt[]>(mockStudentDoubts);
   const [lessonPlans, setLessonPlans] = useState<LessonPlan[]>(mockLessonPlans);
   const [teachingMaterials, setTeachingMaterials] = useState<TeachingMaterial[]>(mockTeachingMaterials);
+
+  // Parent Portal state
+  const [childrenList, setChildrenList] = useState<ParentChild[]>(mockChildrenList);
+  const [selectedChildId, setSelectedChildId] = useState<string>('std_arjun_10');
+  const [parentMeetings, setParentMeetings] = useState<ParentTeacherMeeting[]>(mockParentMeetings);
+  const [teacherReviews, setTeacherReviews] = useState<TeacherReview[]>(mockTeacherReviews);
+  const [studentDocuments, setStudentDocuments] = useState<StudentDocument[]>(mockStudentDocuments);
+  const [transportInfo] = useState<Record<string, TransportDetail>>(mockTransportInfo);
+  const [libraryBooks] = useState<LibraryBookItem[]>(mockLibraryBooks);
+  const [leaveRequests, setLeaveRequests] = useState<ParentLeaveRequest[]>(mockLeaveRequests);
+  const [supportTickets, setSupportTickets] = useState<ParentSupportTicket[]>(mockSupportTickets);
+
+  const selectedChild = childrenList.find((c) => c.id === selectedChildId) || childrenList[0];
 
   const addToast = (title: string, message: string, type: Toast['type'] = 'success') => {
     const id = 'toast_' + Date.now() + Math.random().toString(36).substring(2, 5);
@@ -537,6 +582,70 @@ export const LmsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     addToast('Live Session Scheduled', `"${created.topic}" scheduled for ${created.grade}.`, 'success');
   };
 
+  const bookParentTeacherMeeting = (meeting: Omit<ParentTeacherMeeting, 'id' | 'status'>) => {
+    const created: ParentTeacherMeeting = {
+      ...meeting,
+      id: 'ptm_' + Date.now(),
+      status: 'pending'
+    };
+    setParentMeetings((prev) => [created, ...prev]);
+    addToast('PTA Meeting Requested', `Meeting request submitted for ${meeting.teacherName}.`, 'success');
+  };
+
+  const submitTeacherReview = (review: Omit<TeacherReview, 'id' | 'submittedAt'>) => {
+    const created: TeacherReview = {
+      ...review,
+      id: 'rev_' + Date.now(),
+      submittedAt: 'Today'
+    };
+    setTeacherReviews((prev) => [created, ...prev]);
+    addToast('Feedback Submitted', `Your review for ${review.teacherName} has been recorded.`, 'success');
+  };
+
+  const payChildFee = (childId: string, amount: number, paymentMethod: string) => {
+    setChildrenList((prev) =>
+      prev.map((c) =>
+        c.id === childId
+          ? { ...c, feeStatus: 'paid', pendingFeeAmount: 0 }
+          : c
+      )
+    );
+    const newDoc: StudentDocument = {
+      id: 'doc_' + Date.now(),
+      studentId: childId,
+      title: `Fee Receipt #INV-2026-${Math.floor(1000 + Math.random() * 9000)} ($${amount})`,
+      category: 'fee_receipt',
+      issueDate: 'Today',
+      fileSize: '480 KB',
+      downloadUrl: '#'
+    };
+    setStudentDocuments((prev) => [newDoc, ...prev]);
+    addToast('Fee Payment Successful', `$${amount} paid via ${paymentMethod}. Official receipt added to documents.`, 'success');
+  };
+
+  const submitLeaveRequest = (req: Omit<ParentLeaveRequest, 'id' | 'submittedAt' | 'status'>) => {
+    const created: ParentLeaveRequest = {
+      ...req,
+      id: 'lve_' + Date.now(),
+      submittedAt: 'Today',
+      status: 'pending'
+    };
+    setLeaveRequests((prev) => [created, ...prev]);
+    addToast('Absence Excuse Note Submitted', `Leave request for ${req.studentName} sent to class teacher.`, 'info');
+  };
+
+  const submitSupportTicket = (ticket: Omit<ParentSupportTicket, 'id' | 'ticketNumber' | 'createdAt' | 'status'>) => {
+    const created: ParentSupportTicket = {
+      ...ticket,
+      id: 'tkt_' + Date.now(),
+      ticketNumber: 'EDP-SUP-' + Math.floor(1000 + Math.random() * 9000),
+      createdAt: 'Today',
+      status: 'open'
+    };
+    setSupportTickets((prev) => [created, ...prev]);
+    addToast('Support Ticket Created', `Ticket #${created.ticketNumber} created successfully.`, 'success');
+  };
+
   return (
     <LmsContext.Provider
       value={{
@@ -575,6 +684,17 @@ export const LmsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         studentDoubts,
         lessonPlans,
         teachingMaterials,
+        childrenList,
+        selectedChildId,
+        setSelectedChildId,
+        selectedChild,
+        parentMeetings,
+        teacherReviews,
+        studentDocuments,
+        transportInfo,
+        libraryBooks,
+        leaveRequests,
+        supportTickets,
         submitAssignment,
         saveAssignmentDraft,
         payFeeRecord,
@@ -596,6 +716,11 @@ export const LmsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         saveLessonPlan,
         uploadTeachingMaterial,
         scheduleLiveClass,
+        bookParentTeacherMeeting,
+        submitTeacherReview,
+        payChildFee,
+        submitLeaveRequest,
+        submitSupportTicket,
         toasts,
         addToast,
         removeToast,

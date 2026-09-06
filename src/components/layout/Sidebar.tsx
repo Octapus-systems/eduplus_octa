@@ -82,17 +82,36 @@ export const Sidebar: React.FC = () => {
     { key: 'admin-settings', label: 'Roles & Settings', icon: Settings }
   ];
 
+  const parentNavItems = [
+    { key: 'parent-dashboard', label: 'Parent Dashboard', icon: LayoutDashboard },
+    { key: 'parent-children', label: 'My Children', icon: Users },
+    { key: 'parent-academics', label: 'Academic Performance', icon: BarChart3 },
+    { key: 'parent-attendance', label: 'Attendance Record', icon: CalendarCheck2 },
+    { key: 'parent-assignments', label: 'Assignments', icon: FileCheck2 },
+    { key: 'parent-exams', label: 'Exams & Results', icon: GraduationCap },
+    { key: 'parent-fees', label: 'Fees & Finance', icon: CreditCard },
+    { key: 'parent-teachers', label: 'Teacher Connect & PTA', icon: MessageSquare },
+    { key: 'parent-ai', label: 'AI Parent Companion', icon: Sparkles },
+    { key: 'parent-achievements', label: 'Achievements & Badges', icon: Award },
+    { key: 'parent-events', label: 'Events & Timetable', icon: CalendarCheck2 },
+    { key: 'parent-documents', label: 'Documents & Support', icon: HelpCircle },
+    { key: 'parent-settings', label: 'Parent Settings', icon: Settings }
+  ];
+
   const navItems =
     currentRole === 'student'
       ? studentNavItems
       : currentRole === 'teacher'
       ? teacherNavItems
-      : adminNavItems;
+      : currentRole === 'admin'
+      ? adminNavItems
+      : parentNavItems;
 
   const roleColors = {
     student: 'bg-indigo-500/10 text-indigo-600 border-indigo-200',
     teacher: 'bg-emerald-500/10 text-emerald-600 border-emerald-200',
-    admin: 'bg-purple-500/10 text-purple-600 border-purple-200'
+    admin: 'bg-purple-500/10 text-purple-600 border-purple-200',
+    parent: 'bg-amber-500/10 text-amber-600 border-amber-200'
   }[currentRole];
 
   return (

@@ -9,10 +9,18 @@ import {
   Certificate,
   Announcement,
   NotificationItem,
-  VideoLecture
+  VideoLecture,
+  ParentChild,
+  ParentTeacherMeeting,
+  TeacherReview,
+  StudentDocument,
+  TransportDetail,
+  LibraryBookItem,
+  ParentLeaveRequest,
+  ParentSupportTicket
 } from '../types';
 
-export const mockUsers: Record<'student' | 'teacher' | 'admin', User> = {
+export const mockUsers: Record<'student' | 'teacher' | 'admin' | 'parent', User> = {
   student: {
     id: 'usr_std_01',
     name: 'Aarav Patel',
@@ -46,6 +54,15 @@ export const mockUsers: Record<'student' | 'teacher' | 'admin', User> = {
     department: 'School Administration',
     designation: 'Principal & Operations Director',
     phone: '+1 (555) 443-9087'
+  },
+  parent: {
+    id: 'usr_prn_01',
+    name: 'Rajesh Mehta',
+    email: 'rajesh.mehta@parent.school.edu',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+    role: 'parent',
+    phone: '+1 (555) 987-6543',
+    address: '108 Palm Avenue, Springdale'
   }
 };
 
@@ -1425,5 +1442,219 @@ export const mockTeachingMaterials: any[] = [
     downloadUrl: '#'
   }
 ];
+
+export const mockChildrenList: ParentChild[] = [
+  {
+    id: 'std_arjun_10',
+    name: 'Arjun Mehta',
+    avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80',
+    grade: 'Class 10',
+    section: 'A',
+    rollNumber: '10-A-18',
+    admissionId: 'ADM-2024-8841',
+    dob: '14 Oct 2010',
+    house: 'Ruby House (Red)',
+    classTeacherName: 'Dr. Sunita Rao',
+    classTeacherAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
+    classTeacherEmail: 'sunita.rao@school.edu',
+    attendancePercentage: 94.2,
+    gpa: 3.85,
+    feeStatus: 'pending',
+    pendingFeeAmount: 450,
+    unsubmittedAssignments: 1,
+    upcomingExamsCount: 2,
+    conductRating: 'Exemplary (A+)'
+  },
+  {
+    id: 'std_ananya_07',
+    name: 'Ananya Mehta',
+    avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80',
+    grade: 'Class 7',
+    section: 'B',
+    rollNumber: '07-B-09',
+    admissionId: 'ADM-2025-9102',
+    dob: '02 Mar 2013',
+    house: 'Sapphire House (Blue)',
+    classTeacherName: 'Elena Rostova',
+    classTeacherAvatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80',
+    classTeacherEmail: 'elena.rostova@school.edu',
+    attendancePercentage: 97.8,
+    gpa: 3.92,
+    feeStatus: 'paid',
+    pendingFeeAmount: 0,
+    unsubmittedAssignments: 0,
+    upcomingExamsCount: 1,
+    conductRating: 'Outstanding (A+)'
+  }
+];
+
+export const mockParentMeetings: ParentTeacherMeeting[] = [
+  {
+    id: 'ptm-001',
+    studentId: 'std_arjun_10',
+    teacherId: 'usr_tch_01',
+    teacherName: 'Dr. Sunita Rao',
+    teacherAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
+    subject: 'Physics & General Science',
+    requestedDate: 'Sep 12, 2026',
+    requestedTime: '03:30 PM - 03:50 PM',
+    mode: 'video_call',
+    agenda: 'Discussion on Midterm exam prep and Physics lab practical performance.',
+    status: 'confirmed',
+    meetingLink: 'https://meet.edupulse.edu/ptm-sunita-rao',
+    venue: 'Google Meet Studio Room 2',
+    teacherNotes: 'Confirmed. Looking forward to reviewing Arjun\'s numerical problem-solving progress.'
+  },
+  {
+    id: 'ptm-002',
+    studentId: 'std_arjun_10',
+    teacherId: 'tch-math-02',
+    teacherName: 'Prof. David Miller',
+    teacherAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+    subject: 'Mathematics',
+    requestedDate: 'Aug 22, 2026',
+    requestedTime: '04:00 PM',
+    mode: 'in_person',
+    agenda: 'Quarterly academic review.',
+    status: 'completed',
+    venue: 'Faculty Cabin 204',
+    teacherNotes: 'Arjun is performing exceptionally well in Trigonometry. Encouraged to attempt advanced Olympiad problems.'
+  }
+];
+
+export const mockTeacherReviews: TeacherReview[] = [
+  {
+    id: 'rev-101',
+    teacherId: 'usr_tch_01',
+    teacherName: 'Dr. Sunita Rao',
+    subject: 'Physics',
+    rating: 5,
+    feedbackText: 'Dr. Rao is an inspiring educator! Her practical lab demos have greatly boosted Arjun\'s interest in physical science.',
+    category: 'teaching_quality',
+    submittedAt: 'Aug 15, 2026',
+    anonymous: false
+  }
+];
+
+export const mockStudentDocuments: StudentDocument[] = [
+  {
+    id: 'doc-101',
+    studentId: 'std_arjun_10',
+    title: 'Class 10 Term 1 Official Report Card (2026)',
+    category: 'report_card',
+    issueDate: 'Aug 30, 2026',
+    fileSize: '1.8 MB',
+    downloadUrl: '#'
+  },
+  {
+    id: 'doc-102',
+    studentId: 'std_arjun_10',
+    title: 'Inter-School Science Olympiad Gold Certificate',
+    category: 'certificate',
+    issueDate: 'Jul 14, 2026',
+    fileSize: '2.4 MB',
+    downloadUrl: '#'
+  },
+  {
+    id: 'doc-103',
+    studentId: 'std_arjun_10',
+    title: 'Fee Receipt #INV-2026-0881 (Q2 Tuition)',
+    category: 'fee_receipt',
+    issueDate: 'Jun 10, 2026',
+    fileSize: '450 KB',
+    downloadUrl: '#'
+  },
+  {
+    id: 'doc-104',
+    studentId: 'std_arjun_10',
+    title: 'Annual Student Health & Conduct Verification',
+    category: 'conduct',
+    issueDate: 'Apr 05, 2026',
+    fileSize: '920 KB',
+    downloadUrl: '#'
+  }
+];
+
+export const mockTransportInfo: Record<string, TransportDetail> = {
+  std_arjun_10: {
+    studentId: 'std_arjun_10',
+    busNumber: 'Bus #14 (Yellow Fleet)',
+    routeName: 'Route C: Palm Avenue - Springdale Central',
+    pickupLocation: 'Palm Avenue Gate 3 Stop',
+    dropLocation: 'School Main Campus Bay 2',
+    pickupTime: '07:15 AM',
+    dropTime: '03:45 PM',
+    driverName: 'Ramesh Kumar',
+    driverPhone: '+1 (555) 901-2244',
+    status: 'on_schedule'
+  },
+  std_ananya_07: {
+    studentId: 'std_ananya_07',
+    busNumber: 'Bus #14 (Yellow Fleet)',
+    routeName: 'Route C: Palm Avenue - Springdale Central',
+    pickupLocation: 'Palm Avenue Gate 3 Stop',
+    dropLocation: 'School Junior Wing Bay 1',
+    pickupTime: '07:15 AM',
+    dropTime: '03:45 PM',
+    driverName: 'Ramesh Kumar',
+    driverPhone: '+1 (555) 901-2244',
+    status: 'on_schedule'
+  }
+};
+
+export const mockLibraryBooks: LibraryBookItem[] = [
+  {
+    id: 'lib-01',
+    studentId: 'std_arjun_10',
+    bookTitle: 'Concepts of Physics (Vol 1) - H.C. Verma',
+    author: 'H.C. Verma',
+    isbn: '978-8177091877',
+    issueDate: 'Aug 20, 2026',
+    dueDate: 'Sep 10, 2026',
+    status: 'issued',
+    fineAmount: 0
+  },
+  {
+    id: 'lib-02',
+    studentId: 'std_arjun_10',
+    bookTitle: 'The Code Book: Science of Secrecy',
+    author: 'Simon Singh',
+    isbn: '978-0385495325',
+    issueDate: 'Jul 10, 2026',
+    dueDate: 'Aug 01, 2026',
+    status: 'returned',
+    fineAmount: 0
+  }
+];
+
+export const mockLeaveRequests: ParentLeaveRequest[] = [
+  {
+    id: 'lve-101',
+    studentId: 'std_arjun_10',
+    studentName: 'Arjun Mehta',
+    startDate: '2026-08-10',
+    endDate: '2026-08-11',
+    reasonCategory: 'dental_checkup' as any,
+    reasonDetails: 'Scheduled orthodontic adjustment.',
+    submittedAt: 'Aug 08, 2026',
+    status: 'approved',
+    teacherRemarks: 'Leave granted. Please catch up on Physics Chapter 4 exercises.'
+  }
+];
+
+export const mockSupportTickets: ParentSupportTicket[] = [
+  {
+    id: 'tkt-801',
+    ticketNumber: 'EDP-SUP-9941',
+    category: 'billing',
+    subject: 'Query regarding Q3 Transport Fee receipt generation',
+    description: 'Payment was made online yesterday, requesting updated tax receipt download link.',
+    priority: 'normal',
+    createdAt: 'Sep 02, 2026',
+    status: 'resolved',
+    response: 'Receipt #INV-2026-0881 has been generated and uploaded to your Student Documents vault.'
+  }
+];
+
 
 
