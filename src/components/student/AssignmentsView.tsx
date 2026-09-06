@@ -15,9 +15,9 @@ import {
 } from 'lucide-react';
 
 export const AssignmentsView: React.FC = () => {
-  const { assignments, submitAssignment, addToast } = useLms();
+  const { assignments, submitAssignment, saveAssignmentDraft, addToast } = useLms();
 
-  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'submitted' | 'evaluated'>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'draft' | 'submitted' | 'evaluated' | 'overdue'>('all');
   const [selectedAsgForSubmission, setSelectedAsgForSubmission] = useState<any | null>(null);
   const [uploadedFileName, setUploadedFileName] = useState('');
   const [submissionNotes, setSubmissionNotes] = useState('');
@@ -29,8 +29,8 @@ export const AssignmentsView: React.FC = () => {
 
   const handleOpenSubmitModal = (asg: any) => {
     setSelectedAsgForSubmission(asg);
-    setUploadedFileName('');
-    setSubmissionNotes('');
+    setUploadedFileName(asg.draftFileName || '');
+    setSubmissionNotes(asg.draftNotes || '');
   };
 
   const handleFileDrop = (e: React.DragEvent) => {
@@ -54,27 +54,34 @@ export const AssignmentsView: React.FC = () => {
     setSelectedAsgForSubmission(null);
   };
 
+  const handleSaveDraft = () => {
+    if (!selectedAsgForSubmission) return;
+    const finalFileName = uploadedFileName || `${selectedAsgForSubmission.title.replace(/\s+/g, '_')}_Draft.pdf`;
+    saveAssignmentDraft(selectedAsgForSubmission.id, finalFileName, submissionNotes);
+    setSelectedAsgForSubmission(null);
+  };
+
   return (
     <div id="student-assignments-view" className="space-y-6">
       {/* View Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
-            Assignments & Tasks
+            Assignments & Coursework Tasks
           </h2>
           <p className="text-xs text-slate-500 mt-1">
-            Submit coursework, track due dates, and view graded teacher evaluations
+            Submit homework, save drafts, track deadlines, and view faculty feedback
           </p>
         </div>
 
         {/* Status Filter Tabs */}
-        <div className="flex items-center bg-white p-1 rounded-xl border border-slate-200 shadow-xs">
-          {(['all', 'pending', 'submitted', 'evaluated'] as const).map((st) => (
+        <div className="flex items-center bg-white p-1 rounded-xl border border-slate-200 shadow-xs overflow-x-auto">
+          {(['all', 'pending', 'draft', 'submitted', 'evaluated', 'overdue'] as const).map((st) => (
             <button
               key={st}
               id={`filter-asg-${st}`}
               onClick={() => setStatusFilter(st)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize whitespace-nowrap transition-all ${
                 statusFilter === st
                   ? 'bg-indigo-600 text-white shadow-xs'
                   : 'text-slate-500 hover:text-slate-800'
@@ -112,11 +119,27 @@ export const AssignmentsView: React.FC = () => {
                 <div className="text-xs text-slate-500">
                   <span className="font-semibold text-slate-800">{asg.maxScore}</span> Maximum Points
                 </div>
-                <div className="text-xs font-bold text-amber-600 flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5" /> Due {asg.dueDate}
+                <div className={`text-xs font-bold flex items-center gap-1 ${asg.status === 'overdue' ? 'text-rose-600' : 'text-amber-600'}`}>
+                  <Clock className="w-3.5 h-3.5" /> {asg.status === 'overdue' ? 'Expired' : `Due ${asg.dueDate}`}
                 </div>
               </div>
             </div>
+
+            {/* Draft Banner if draft */}
+            {asg.status === 'draft' && (
+              <div className="p-3 bg-amber-50 rounded-xl border border-amber-200/80 text-xs text-amber-800 flex items-center justify-between">
+                <div>
+                  <span className="font-bold">Draft Saved locally: </span>
+                  <span>{asg.draftFileName || 'Solution_Draft.pdf'}</span>
+                </div>
+                <button
+                  onClick={() => handleOpenSubmitModal(asg)}
+                  className="font-bold underline hover:text-amber-900 text-xs"
+                >
+                  Resume & Turn In
+                </button>
+              </div>
+            )}
 
             {/* Instructions checklist */}
             {asg.instructions && asg.instructions.length > 0 && (
@@ -148,14 +171,14 @@ export const AssignmentsView: React.FC = () => {
 
               {/* Action Buttons */}
               <div className="flex items-center gap-2">
-                {asg.status === 'pending' && (
+                {(asg.status === 'pending' || asg.status === 'draft') && (
                   <button
                     id={`btn-submit-work-${asg.id}`}
                     onClick={() => handleOpenSubmitModal(asg)}
-                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors flex items-center gap-2"
+                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors flex items-center gap-2 cursor-pointer"
                   >
                     <UploadCloud className="w-4 h-4" />
-                    Submit Homework
+                    {asg.status === 'draft' ? 'Resume & Submit' : 'Submit Homework'}
                   </button>
                 )}
 
@@ -166,7 +189,7 @@ export const AssignmentsView: React.FC = () => {
                     </span>
                     <button
                       onClick={() => handleOpenSubmitModal(asg)}
-                      className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-lg transition-colors"
+                      className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-lg transition-colors cursor-pointer"
                     >
                       Resubmit
                     </button>
@@ -190,6 +213,12 @@ export const AssignmentsView: React.FC = () => {
                       Evaluated on {asg.mySubmission.submittedAt}
                     </span>
                   </div>
+                )}
+
+                {asg.status === 'overdue' && (
+                  <span className="text-xs font-bold text-rose-600 bg-rose-50 px-3 py-1 rounded-lg border border-rose-200">
+                    Submission Window Closed
+                  </span>
                 )}
               </div>
             </div>
@@ -239,21 +268,31 @@ export const AssignmentsView: React.FC = () => {
               />
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+            <div className="flex items-center justify-between pt-3 border-t border-slate-100">
               <button
                 type="button"
-                onClick={() => setSelectedAsgForSubmission(null)}
-                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900"
+                onClick={handleSaveDraft}
+                className="px-4 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-bold text-xs rounded-xl transition-colors cursor-pointer"
               >
-                Cancel
+                Save as Draft
               </button>
-              <button
-                type="submit"
-                id="btn-confirm-submit-asg"
-                className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
-              >
-                Turn In Assignment
-              </button>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setSelectedAsgForSubmission(null)}
+                  className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  id="btn-confirm-submit-asg"
+                  className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
+                >
+                  Turn In Assignment
+                </button>
+              </div>
             </div>
           </form>
         </Modal>

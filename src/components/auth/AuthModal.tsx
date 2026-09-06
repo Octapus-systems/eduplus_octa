@@ -210,6 +210,43 @@ export const AuthModal: React.FC = () => {
               </span>
             )}
           </div>
+
+          {/* Parent option */}
+          <div
+            id="role-select-parent"
+            onClick={() => handleDemoSwitch('parent')}
+            className={`p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
+              currentRole === 'parent'
+                ? 'border-amber-500 bg-amber-50/50 shadow-xs'
+                : 'border-slate-200 hover:border-amber-300 hover:bg-slate-50'
+            }`}
+          >
+            <div className="flex items-center gap-3.5">
+              <img
+                src={mockUsers.parent.avatar}
+                alt="Parent"
+                className="w-11 h-11 rounded-full object-cover ring-2 ring-amber-300"
+              />
+              <div>
+                <div className="flex items-center gap-2">
+                  <h4 className="text-sm font-bold text-slate-900">{mockUsers.parent.name}</h4>
+                  <span className="px-2 py-0.5 text-[10px] font-semibold bg-amber-100 text-amber-800 rounded-full">
+                    Parent / Guardian
+                  </span>
+                </div>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Linked Students: Arjun Mehta (Class 10), Ananya Mehta (Class 7)
+                </p>
+              </div>
+            </div>
+            {currentRole === 'parent' ? (
+              <CheckCircle2 className="w-5 h-5 text-amber-600" />
+            ) : (
+              <span className="text-xs text-amber-600 font-medium flex items-center gap-1">
+                Enter <ArrowRight className="w-3.5 h-3.5" />
+              </span>
+            )}
+          </div>
         </div>
       )}
 
@@ -217,8 +254,8 @@ export const AuthModal: React.FC = () => {
         <form onSubmit={handleLoginSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1">Select Role</label>
-            <div className="grid grid-cols-3 gap-2">
-              {(['student', 'teacher', 'admin'] as UserRole[]).map((r) => (
+            <div className="grid grid-cols-4 gap-2">
+              {(['student', 'teacher', 'admin', 'parent'] as UserRole[]).map((r) => (
                 <button
                   type="button"
                   key={r}

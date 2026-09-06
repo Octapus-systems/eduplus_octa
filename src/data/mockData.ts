@@ -9,10 +9,18 @@ import {
   Certificate,
   Announcement,
   NotificationItem,
-  VideoLecture
+  VideoLecture,
+  ParentChild,
+  ParentTeacherMeeting,
+  TeacherReview,
+  StudentDocument,
+  TransportDetail,
+  LibraryBookItem,
+  ParentLeaveRequest,
+  ParentSupportTicket
 } from '../types';
 
-export const mockUsers: Record<'student' | 'teacher' | 'admin', User> = {
+export const mockUsers: Record<'student' | 'teacher' | 'admin' | 'parent', User> = {
   student: {
     id: 'usr_std_01',
     name: 'Aarav Patel',
@@ -46,6 +54,15 @@ export const mockUsers: Record<'student' | 'teacher' | 'admin', User> = {
     department: 'School Administration',
     designation: 'Principal & Operations Director',
     phone: '+1 (555) 443-9087'
+  },
+  parent: {
+    id: 'usr_prn_01',
+    name: 'Rajesh Mehta',
+    email: 'rajesh.mehta@parent.school.edu',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+    role: 'parent',
+    phone: '+1 (555) 987-6543',
+    address: '108 Palm Avenue, Springdale'
   }
 };
 
@@ -462,6 +479,42 @@ export const mockAssignments: Assignment[] = [
     instructions: ['Length: 500-600 words', 'Cite at least 3 direct quotes'],
     totalSubmissions: 42,
     totalStudents: 42
+  },
+  {
+    id: 'asg_105',
+    title: 'Chemistry Lab Report: Electrolysis of Acidified Water',
+    courseId: 'crs_10_chem',
+    courseName: 'Class 10 Chemistry',
+    subject: 'Chemistry',
+    grade: 'Class 10',
+    dueDate: 'Sep 14, 2026',
+    maxScore: 25,
+    status: 'draft',
+    draftFileName: 'Aarav_Chem_Lab_Draft_v1.docx',
+    draftNotes: 'Saved initial observations on H2 vs O2 volumetric ratio (2:1). Need to finish balanced half-reactions.',
+    description: 'Prepare a formal lab report documenting the electrolytic breakdown of water into Hydrogen and Oxygen gas using platinum electrodes.',
+    instructions: [
+      'Record anode and cathode gas volume ratios',
+      'Write balanced oxidation and reduction half-cell equations',
+      'Submit as PDF or DOCX'
+    ],
+    totalSubmissions: 12,
+    totalStudents: 42
+  },
+  {
+    id: 'asg_106',
+    title: 'English Grammar & Formal Letter Writing Practice',
+    courseId: 'crs_10_eng',
+    courseName: 'Class 10 English',
+    subject: 'English',
+    grade: 'Class 10',
+    dueDate: 'Aug 20, 2026',
+    maxScore: 15,
+    status: 'overdue',
+    description: 'Write a formal letter to the Municipal Commissioner requesting road repairs near school gate.',
+    instructions: ['Follow standard formal letter layout', 'Word limit: 150-200 words'],
+    totalSubmissions: 39,
+    totalStudents: 42
   }
 ];
 
@@ -747,12 +800,12 @@ export const mockNotifications: NotificationItem[] = [
   },
   {
     id: 'notif_4',
-    title: 'Term 2 Fee Receipt Generated',
-    message: 'Your fee installment of $850 was successfully reconciled. Invoice #INV-2026-098.',
+    title: 'Term 2 Schedule & Guidelines',
+    message: 'Institutional academic guidelines for Term 2 are now available on the notice board.',
     timestamp: '4 days ago',
     read: true,
-    type: 'fee',
-    linkTab: 'settings'
+    type: 'announcement',
+    linkTab: 'announcements'
   }
 ];
 
@@ -1103,3 +1156,505 @@ export const allGradesList: string[] = [
   'Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10',
   'Class 11', 'Class 12'
 ];
+
+export const mockLiveClasses: any[] = [
+  {
+    id: 'live_101',
+    subject: 'Physics',
+    topic: 'Live Demonstration: Magnetic Lines & Solenoid Currents',
+    grade: 'Class 10',
+    section: 'A',
+    instructorName: 'Dr. Sunita Rao',
+    instructorAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
+    startTime: 'Today, 11:00 AM',
+    durationMinutes: 45,
+    status: 'live',
+    attendeesCount: 38,
+    roomCode: 'PHY-10A-LIVE'
+  },
+  {
+    id: 'live_102',
+    subject: 'Mathematics',
+    topic: 'Problem-Solving Sprint: Quadratic Word Problems',
+    grade: 'Class 10',
+    section: 'A',
+    instructorName: 'Prof. Ramesh Nambiar',
+    instructorAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+    startTime: 'Today, 02:30 PM',
+    durationMinutes: 60,
+    status: 'starting_soon',
+    attendeesCount: 0,
+    roomCode: 'MTH-10A-LIVE'
+  },
+  {
+    id: 'live_103',
+    subject: 'Chemistry',
+    topic: 'Interactive Redox Reactions & Flame Tests',
+    grade: 'Class 10',
+    section: 'A',
+    instructorName: 'Dr. Meenakshi Joshi',
+    instructorAvatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80',
+    startTime: 'Tomorrow, 10:00 AM',
+    durationMinutes: 45,
+    status: 'upcoming',
+    attendeesCount: 0,
+    roomCode: 'CHM-10A-LIVE'
+  },
+  {
+    id: 'live_104',
+    subject: 'Computer Science',
+    topic: 'Python Function Scope & Global vs Local Variables',
+    grade: 'Class 10',
+    section: 'A',
+    instructorName: 'Anand Kothari',
+    instructorAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
+    startTime: 'Yesterday, 11:00 AM',
+    durationMinutes: 50,
+    status: 'completed',
+    recordingUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&auto=format&fit=crop&q=80',
+    attendeesCount: 41
+  }
+];
+
+export const mockStudentAttendanceLog: any[] = [
+  {
+    date: 'Sep 05, 2026',
+    dayOfWeek: 'Friday',
+    status: 'present',
+    remark: 'Full day attendance recorded',
+    subjectSessions: [
+      { subject: 'Physics', time: '09:00 - 09:45 AM', status: 'present' },
+      { subject: 'Mathematics', time: '10:00 - 10:45 AM', status: 'present' },
+      { subject: 'Chemistry', time: '11:15 - 12:00 PM', status: 'present' },
+      { subject: 'English', time: '01:00 - 01:45 PM', status: 'present' }
+    ]
+  },
+  {
+    date: 'Sep 04, 2026',
+    dayOfWeek: 'Thursday',
+    status: 'present',
+    remark: 'Full day attendance recorded',
+    subjectSessions: [
+      { subject: 'Computer Science', time: '09:00 - 09:45 AM', status: 'present' },
+      { subject: 'Physics', time: '10:00 - 10:45 AM', status: 'present' },
+      { subject: 'Mathematics', time: '11:15 - 12:00 PM', status: 'present' }
+    ]
+  },
+  {
+    date: 'Sep 03, 2026',
+    dayOfWeek: 'Wednesday',
+    status: 'late',
+    remark: 'Arrived at 09:18 AM due to school bus delay',
+    subjectSessions: [
+      { subject: 'Physics Lab', time: '09:00 - 10:30 AM', status: 'late' },
+      { subject: 'English', time: '11:00 - 11:45 AM', status: 'present' }
+    ]
+  },
+  {
+    date: 'Sep 02, 2026',
+    dayOfWeek: 'Tuesday',
+    status: 'present',
+    remark: 'Full day attendance recorded',
+    subjectSessions: [
+      { subject: 'Chemistry', time: '09:00 - 09:45 AM', status: 'present' },
+      { subject: 'Mathematics', time: '10:00 - 10:45 AM', status: 'present' }
+    ]
+  },
+  {
+    date: 'Sep 01, 2026',
+    dayOfWeek: 'Monday',
+    status: 'present',
+    remark: 'Full day attendance recorded',
+    subjectSessions: [
+      { subject: 'Physics', time: '09:00 - 09:45 AM', status: 'present' },
+      { subject: 'English', time: '10:00 - 10:45 AM', status: 'present' }
+    ]
+  },
+  {
+    date: 'Aug 28, 2026',
+    dayOfWeek: 'Friday',
+    status: 'absent',
+    remark: 'Parent approved leave (Medical appointment)',
+    subjectSessions: [
+      { subject: 'All Classes', time: 'Full Day', status: 'absent' }
+    ]
+  }
+];
+
+export const mockStudentMessages: any[] = [
+  {
+    id: 'msg_1',
+    senderId: 'usr_tch_01',
+    senderName: 'Dr. Sunita Rao',
+    senderAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
+    senderRole: 'teacher',
+    recipientId: 'usr_std_01',
+    text: 'Hello Aarav, excellent work on your Physics quiz last week! Remember to review problem 6 on equivalent resistance before tomorrow\'s lab.',
+    timestamp: 'Yesterday, 4:30 PM'
+  },
+  {
+    id: 'msg_2',
+    senderId: 'usr_std_01',
+    senderName: 'Aarav Patel',
+    senderAvatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80',
+    senderRole: 'student',
+    recipientId: 'usr_tch_01',
+    text: 'Thank you ma\'am! I have worked out the parallel branch derivations and prepared the formula sheet.',
+    timestamp: 'Yesterday, 5:10 PM'
+  },
+  {
+    id: 'msg_3',
+    senderId: 'usr_tch_01',
+    senderName: 'Dr. Sunita Rao',
+    senderAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
+    senderRole: 'teacher',
+    recipientId: 'usr_std_01',
+    text: 'Great initiative! See you in today\'s live stream at 11:00 AM.',
+    timestamp: 'Today, 08:45 AM'
+  }
+];
+
+export const mockStudentDoubts: any[] = [
+  {
+    id: 'dbt_101',
+    studentId: 'std_01',
+    studentName: 'Aarav Patel',
+    studentAvatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80',
+    grade: 'Class 10',
+    section: 'A',
+    subject: 'Physics',
+    topic: 'Ohm\'s Law & Internal Resistance',
+    questionText: 'Ma\'am, in Q4 of Assignment 2, why does the terminal potential difference drop when a heavy current is drawn from a non-ideal battery?',
+    submittedAt: 'Today, 10:15 AM',
+    status: 'pending',
+    attachmentName: 'Circuit_Diagram_Q4_Query.png'
+  },
+  {
+    id: 'dbt_102',
+    studentId: 'std_02',
+    studentName: 'Ananya Sharma',
+    studentAvatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80',
+    grade: 'Class 10',
+    section: 'A',
+    subject: 'Physics',
+    topic: 'Refraction through Prism',
+    questionText: 'Why does violet light deviate the most in a glass prism compared to red light?',
+    submittedAt: 'Yesterday, 6:40 PM',
+    status: 'resolved',
+    teacherReply: 'Violet light has a shorter wavelength λ (~400nm), so glass exhibits a higher refractive index μ for violet according to Cauchy\'s formula, causing maximum bending angle D.',
+    resolvedAt: 'Yesterday, 8:15 PM'
+  },
+  {
+    id: 'dbt_103',
+    studentId: 'std_03',
+    studentName: 'Devendra Nair',
+    studentAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
+    grade: 'Class 10',
+    section: 'A',
+    subject: 'Mathematics',
+    topic: 'Quadratic Discriminant',
+    questionText: 'Sir, if D = 0 in ax² + bx + c = 0, why are both roots equal to -b / 2a?',
+    submittedAt: '2 days ago',
+    status: 'resolved',
+    teacherReply: 'From the quadratic formula x = (-b ± √D)/(2a), when D = 0, the term ± √D becomes 0. Hence both roots simplify identically to x = -b/(2a).',
+    resolvedAt: 'Yesterday, 9:00 AM'
+  }
+];
+
+export const mockLessonPlans: any[] = [
+  {
+    id: 'lp_101',
+    courseId: 'crs_10_phy',
+    subject: 'Physics',
+    grade: 'Class 10',
+    chapterTitle: 'Chapter 2: Electricity & Circuits',
+    topicName: 'Series vs Parallel Circuit Analysis',
+    durationMins: 45,
+    objectives: [
+      'Derive equivalent resistance formula for parallel networks 1/Req = ∑ 1/Ri',
+      'Demonstrate voltage division across series resistors',
+      'Solve 3 real-world multi-loop circuit numerical problems'
+    ],
+    teachingMethod: 'Interactive Board Work + Live Multimeter Demo',
+    status: 'completed'
+  },
+  {
+    id: 'lp_102',
+    courseId: 'crs_10_phy',
+    subject: 'Physics',
+    grade: 'Class 10',
+    chapterTitle: 'Chapter 3: Magnetic Effects of Electric Current',
+    topicName: 'Right Hand Thumb Rule & Solenoid Magnetic Field',
+    durationMins: 45,
+    objectives: [
+      'Explain direction of magnetic field vectors inside solenoid',
+      'Demonstrate iron filings pattern under 12V DC current',
+      'Assign homework worksheet on Fleming\'s Left Hand Rule'
+    ],
+    teachingMethod: 'Visual Simulation & Hands-on Coil Experiment',
+    status: 'draft'
+  }
+];
+
+export const mockTeachingMaterials: any[] = [
+  {
+    id: 'mat_101',
+    title: 'Complete Lecture Deck: Electricity & Current Distribution',
+    subject: 'Physics',
+    grade: 'Class 10',
+    type: 'slides',
+    fileSize: '4.8 MB',
+    uploadedAt: 'Sep 01, 2026',
+    visibility: 'class',
+    downloadUrl: '#'
+  },
+  {
+    id: 'mat_102',
+    title: 'Worksheet 4: Numerical Problems on Resistance Networks',
+    subject: 'Physics',
+    grade: 'Class 10',
+    type: 'worksheet',
+    fileSize: '1.2 MB',
+    uploadedAt: 'Aug 28, 2026',
+    visibility: 'class',
+    downloadUrl: '#'
+  },
+  {
+    id: 'mat_103',
+    title: 'Lab Manual: Ohm\'s Law & Voltmeter Calibration Protocol',
+    subject: 'Physics',
+    grade: 'Class 10',
+    type: 'lab_guide',
+    fileSize: '2.5 MB',
+    uploadedAt: 'Aug 20, 2026',
+    visibility: 'class',
+    downloadUrl: '#'
+  },
+  {
+    id: 'mat_104',
+    title: 'Teacher Draft: Quiz 3 Answer Key & Explanations',
+    subject: 'Physics',
+    grade: 'Class 10',
+    type: 'pdf',
+    fileSize: '890 KB',
+    uploadedAt: 'Sep 04, 2026',
+    visibility: 'draft',
+    downloadUrl: '#'
+  }
+];
+
+export const mockChildrenList: ParentChild[] = [
+  {
+    id: 'std_arjun_10',
+    name: 'Arjun Mehta',
+    avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80',
+    grade: 'Class 10',
+    section: 'A',
+    rollNumber: '10-A-18',
+    admissionId: 'ADM-2024-8841',
+    dob: '14 Oct 2010',
+    house: 'Ruby House (Red)',
+    classTeacherName: 'Dr. Sunita Rao',
+    classTeacherAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
+    classTeacherEmail: 'sunita.rao@school.edu',
+    attendancePercentage: 94.2,
+    gpa: 3.85,
+    feeStatus: 'pending',
+    pendingFeeAmount: 450,
+    unsubmittedAssignments: 1,
+    upcomingExamsCount: 2,
+    conductRating: 'Exemplary (A+)'
+  },
+  {
+    id: 'std_ananya_07',
+    name: 'Ananya Mehta',
+    avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80',
+    grade: 'Class 7',
+    section: 'B',
+    rollNumber: '07-B-09',
+    admissionId: 'ADM-2025-9102',
+    dob: '02 Mar 2013',
+    house: 'Sapphire House (Blue)',
+    classTeacherName: 'Elena Rostova',
+    classTeacherAvatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80',
+    classTeacherEmail: 'elena.rostova@school.edu',
+    attendancePercentage: 97.8,
+    gpa: 3.92,
+    feeStatus: 'paid',
+    pendingFeeAmount: 0,
+    unsubmittedAssignments: 0,
+    upcomingExamsCount: 1,
+    conductRating: 'Outstanding (A+)'
+  }
+];
+
+export const mockParentMeetings: ParentTeacherMeeting[] = [
+  {
+    id: 'ptm-001',
+    studentId: 'std_arjun_10',
+    teacherId: 'usr_tch_01',
+    teacherName: 'Dr. Sunita Rao',
+    teacherAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
+    subject: 'Physics & General Science',
+    requestedDate: 'Sep 12, 2026',
+    requestedTime: '03:30 PM - 03:50 PM',
+    mode: 'video_call',
+    agenda: 'Discussion on Midterm exam prep and Physics lab practical performance.',
+    status: 'confirmed',
+    meetingLink: 'https://meet.edupulse.edu/ptm-sunita-rao',
+    venue: 'Google Meet Studio Room 2',
+    teacherNotes: 'Confirmed. Looking forward to reviewing Arjun\'s numerical problem-solving progress.'
+  },
+  {
+    id: 'ptm-002',
+    studentId: 'std_arjun_10',
+    teacherId: 'tch-math-02',
+    teacherName: 'Prof. David Miller',
+    teacherAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+    subject: 'Mathematics',
+    requestedDate: 'Aug 22, 2026',
+    requestedTime: '04:00 PM',
+    mode: 'in_person',
+    agenda: 'Quarterly academic review.',
+    status: 'completed',
+    venue: 'Faculty Cabin 204',
+    teacherNotes: 'Arjun is performing exceptionally well in Trigonometry. Encouraged to attempt advanced Olympiad problems.'
+  }
+];
+
+export const mockTeacherReviews: TeacherReview[] = [
+  {
+    id: 'rev-101',
+    teacherId: 'usr_tch_01',
+    teacherName: 'Dr. Sunita Rao',
+    subject: 'Physics',
+    rating: 5,
+    feedbackText: 'Dr. Rao is an inspiring educator! Her practical lab demos have greatly boosted Arjun\'s interest in physical science.',
+    category: 'teaching_quality',
+    submittedAt: 'Aug 15, 2026',
+    anonymous: false
+  }
+];
+
+export const mockStudentDocuments: StudentDocument[] = [
+  {
+    id: 'doc-101',
+    studentId: 'std_arjun_10',
+    title: 'Class 10 Term 1 Official Report Card (2026)',
+    category: 'report_card',
+    issueDate: 'Aug 30, 2026',
+    fileSize: '1.8 MB',
+    downloadUrl: '#'
+  },
+  {
+    id: 'doc-102',
+    studentId: 'std_arjun_10',
+    title: 'Inter-School Science Olympiad Gold Certificate',
+    category: 'certificate',
+    issueDate: 'Jul 14, 2026',
+    fileSize: '2.4 MB',
+    downloadUrl: '#'
+  },
+  {
+    id: 'doc-103',
+    studentId: 'std_arjun_10',
+    title: 'Fee Receipt #INV-2026-0881 (Q2 Tuition)',
+    category: 'fee_receipt',
+    issueDate: 'Jun 10, 2026',
+    fileSize: '450 KB',
+    downloadUrl: '#'
+  },
+  {
+    id: 'doc-104',
+    studentId: 'std_arjun_10',
+    title: 'Annual Student Health & Conduct Verification',
+    category: 'conduct',
+    issueDate: 'Apr 05, 2026',
+    fileSize: '920 KB',
+    downloadUrl: '#'
+  }
+];
+
+export const mockTransportInfo: Record<string, TransportDetail> = {
+  std_arjun_10: {
+    studentId: 'std_arjun_10',
+    busNumber: 'Bus #14 (Yellow Fleet)',
+    routeName: 'Route C: Palm Avenue - Springdale Central',
+    pickupLocation: 'Palm Avenue Gate 3 Stop',
+    dropLocation: 'School Main Campus Bay 2',
+    pickupTime: '07:15 AM',
+    dropTime: '03:45 PM',
+    driverName: 'Ramesh Kumar',
+    driverPhone: '+1 (555) 901-2244',
+    status: 'on_schedule'
+  },
+  std_ananya_07: {
+    studentId: 'std_ananya_07',
+    busNumber: 'Bus #14 (Yellow Fleet)',
+    routeName: 'Route C: Palm Avenue - Springdale Central',
+    pickupLocation: 'Palm Avenue Gate 3 Stop',
+    dropLocation: 'School Junior Wing Bay 1',
+    pickupTime: '07:15 AM',
+    dropTime: '03:45 PM',
+    driverName: 'Ramesh Kumar',
+    driverPhone: '+1 (555) 901-2244',
+    status: 'on_schedule'
+  }
+};
+
+export const mockLibraryBooks: LibraryBookItem[] = [
+  {
+    id: 'lib-01',
+    studentId: 'std_arjun_10',
+    bookTitle: 'Concepts of Physics (Vol 1) - H.C. Verma',
+    author: 'H.C. Verma',
+    isbn: '978-8177091877',
+    issueDate: 'Aug 20, 2026',
+    dueDate: 'Sep 10, 2026',
+    status: 'issued',
+    fineAmount: 0
+  },
+  {
+    id: 'lib-02',
+    studentId: 'std_arjun_10',
+    bookTitle: 'The Code Book: Science of Secrecy',
+    author: 'Simon Singh',
+    isbn: '978-0385495325',
+    issueDate: 'Jul 10, 2026',
+    dueDate: 'Aug 01, 2026',
+    status: 'returned',
+    fineAmount: 0
+  }
+];
+
+export const mockLeaveRequests: ParentLeaveRequest[] = [
+  {
+    id: 'lve-101',
+    studentId: 'std_arjun_10',
+    studentName: 'Arjun Mehta',
+    startDate: '2026-08-10',
+    endDate: '2026-08-11',
+    reasonCategory: 'dental_checkup' as any,
+    reasonDetails: 'Scheduled orthodontic adjustment.',
+    submittedAt: 'Aug 08, 2026',
+    status: 'approved',
+    teacherRemarks: 'Leave granted. Please catch up on Physics Chapter 4 exercises.'
+  }
+];
+
+export const mockSupportTickets: ParentSupportTicket[] = [
+  {
+    id: 'tkt-801',
+    ticketNumber: 'EDP-SUP-9941',
+    category: 'billing',
+    subject: 'Query regarding Q3 Transport Fee receipt generation',
+    description: 'Payment was made online yesterday, requesting updated tax receipt download link.',
+    priority: 'normal',
+    createdAt: 'Sep 02, 2026',
+    status: 'resolved',
+    response: 'Receipt #INV-2026-0881 has been generated and uploaded to your Student Documents vault.'
+  }
+];
+
+
+

@@ -325,10 +325,45 @@ export const ProfileSettingsView: React.FC = () => {
             </div>
           </div>
 
+          {/* System Audit Log */}
+          <div className="space-y-3 pt-4 border-t border-slate-100">
+            <div className="flex items-center justify-between">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                System Security & Activity Audit Log
+              </h4>
+              <span className="text-[10px] text-slate-400 font-mono">Live Sync</span>
+            </div>
+            <div className="space-y-2 text-xs">
+              <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                <div>
+                  <span className="font-bold text-slate-800">[Security Log] Administrator Logged In</span>
+                  <p className="text-[11px] text-slate-500">IP: 192.168.1.104 • Auth Method: OAuth 2.0 2FA</p>
+                </div>
+                <span className="text-[10px] text-slate-400 font-mono">Today, 12:04 PM</span>
+              </div>
+
+              <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                <div>
+                  <span className="font-bold text-slate-800">[Financial Log] Fee Invoice #INV-2026-001 Cleared</span>
+                  <p className="text-[11px] text-slate-500">Student: Aarav Patel • Amount: $2,400 • TXN-849201</p>
+                </div>
+                <span className="text-[10px] text-slate-400 font-mono">Today, 10:15 AM</span>
+              </div>
+
+              <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                <div>
+                  <span className="font-bold text-slate-800">[Academic Log] Class 10 Physics Midterm Published</span>
+                  <p className="text-[11px] text-slate-500">Publisher: Dr. Sunita Rao • Enrolled: 42 Students</p>
+                </div>
+                <span className="text-[10px] text-slate-400 font-mono">Yesterday, 4:30 PM</span>
+              </div>
+            </div>
+          </div>
+
           <div className="flex justify-end pt-2">
             <button
               onClick={() => addToast('Institutional Preferences Saved', 'Global school settings updated.', 'success')}
-              className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
+              className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-2xl shadow-xs transition-colors cursor-pointer"
             >
               Save Institutional Settings
             </button>

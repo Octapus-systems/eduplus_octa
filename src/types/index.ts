@@ -1,4 +1,4 @@
-export type UserRole = 'student' | 'teacher' | 'admin';
+export type UserRole = 'student' | 'teacher' | 'admin' | 'parent';
 
 export type GradeLevel = 
   | 'Class 1' | 'Class 2' | 'Class 3' | 'Class 4' | 'Class 5'
@@ -72,6 +72,7 @@ export interface Course {
   category: 'Science' | 'Mathematics' | 'Languages' | 'Social Studies' | 'Computer Science' | 'Arts';
   description: string;
   color: string;
+  status?: 'not_started' | 'in_progress' | 'almost_complete' | 'completed' | 'locked';
 }
 
 export interface AssignmentSubmission {
@@ -86,7 +87,7 @@ export interface AssignmentSubmission {
   fileUrl?: string;
   fileName?: string;
   notes?: string;
-  status: 'pending' | 'evaluated' | 'late';
+  status: 'pending' | 'evaluated' | 'late' | 'draft';
   score?: number;
   maxScore: number;
   teacherFeedback?: string;
@@ -104,10 +105,12 @@ export interface Assignment {
   description: string;
   instructions: string[];
   attachments?: { name: string; size: string; type: string }[];
-  status?: 'pending' | 'submitted' | 'evaluated' | 'overdue';
+  status?: 'draft' | 'pending' | 'submitted' | 'evaluated' | 'overdue' | 'resubmission';
   mySubmission?: AssignmentSubmission;
   totalSubmissions?: number;
   totalStudents?: number;
+  draftFileName?: string;
+  draftNotes?: string;
 }
 
 export interface QuizQuestion {
@@ -118,6 +121,11 @@ export interface QuizQuestion {
   correctOptionIndex?: number;
   explanation?: string;
   points: number;
+  difficulty?: 'Easy' | 'Medium' | 'Difficult' | 'Most Difficult';
+  questionType?: 'MCQ' | 'Multi-Select' | 'True/False' | 'Short Answer' | 'Numerical';
+  negativeMarks?: number;
+  subject?: string;
+  chapter?: string;
 }
 
 export interface Exam {
@@ -129,13 +137,53 @@ export interface Exam {
   durationMinutes: number;
   totalMarks: number;
   passingMarks: number;
-  status: 'upcoming' | 'ongoing' | 'completed' | 'graded';
+  status: 'upcoming' | 'ongoing' | 'completed' | 'graded' | 'available' | 'expired';
   questions: QuizQuestion[];
   score?: number;
   percentage?: number;
   rank?: number;
   feedback?: string;
   examType: 'Midterm' | 'Final' | 'Unit Test' | 'Weekly Quiz';
+  attemptsLeft?: number;
+  randomizeQuestions?: boolean;
+  showScoreImmediately?: boolean;
+  autoSubmitOnTimer?: boolean;
+}
+
+export interface LiveClass {
+  id: string;
+  subject: string;
+  topic: string;
+  grade: GradeLevel;
+  section: string;
+  instructorName: string;
+  instructorAvatar: string;
+  startTime: string;
+  durationMinutes: number;
+  status: 'live' | 'starting_soon' | 'upcoming' | 'completed';
+  recordingUrl?: string;
+  attendeesCount?: number;
+  roomCode?: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  senderId: string;
+  senderName: string;
+  senderAvatar: string;
+  senderRole: UserRole;
+  recipientId?: string;
+  text: string;
+  timestamp: string;
+  attachments?: { name: string; size: string }[];
+}
+
+export interface StudentAttendanceLogDay {
+  date: string;
+  dayOfWeek: string;
+  status: 'present' | 'absent' | 'late' | 'holiday';
+  subjectSessions: { subject: string; time: string; status: 'present' | 'absent' | 'late' }[];
+  remark?: string;
 }
 
 export interface AttendanceStudent {
@@ -144,6 +192,8 @@ export interface AttendanceStudent {
   rollNumber: string;
   avatar: string;
   status: 'present' | 'absent' | 'late';
+  behaviorRemark?: string;
+  parentNotified?: boolean;
 }
 
 export interface AttendanceSession {
@@ -173,6 +223,7 @@ export interface FeeRecord {
   lastPaymentDate?: string;
   paidAt?: string;
   paymentMethod?: string;
+  transactionId?: string;
 }
 
 export interface Certificate {
@@ -206,7 +257,7 @@ export interface NotificationItem {
   message: string;
   timestamp: string;
   read: boolean;
-  type: 'assignment' | 'exam' | 'announcement' | 'fee' | 'grade';
+  type: 'assignment' | 'exam' | 'announcement' | 'fee' | 'grade' | 'live_class';
   linkTab?: string;
 }
 
@@ -222,3 +273,167 @@ export interface VideoLecture {
   thumbnail: string;
   tags: string[];
 }
+
+export interface StudentDoubt {
+  id: string;
+  studentId: string;
+  studentName: string;
+  studentAvatar: string;
+  grade: GradeLevel;
+  section: string;
+  subject: string;
+  topic: string;
+  questionText: string;
+  submittedAt: string;
+  status: 'pending' | 'resolved';
+  teacherReply?: string;
+  resolvedAt?: string;
+  attachmentName?: string;
+}
+
+export interface LessonPlan {
+  id: string;
+  courseId: string;
+  subject: string;
+  grade: GradeLevel;
+  chapterTitle: string;
+  topicName: string;
+  durationMins: number;
+  objectives: string[];
+  teachingMethod: string;
+  status: 'draft' | 'completed';
+}
+
+export interface TeachingMaterial {
+  id: string;
+  title: string;
+  subject: string;
+  grade: GradeLevel;
+  type: 'pdf' | 'slides' | 'worksheet' | 'lab_guide';
+  fileSize: string;
+  uploadedAt: string;
+  visibility: 'class' | 'draft';
+  downloadUrl?: string;
+}
+
+export interface StudentBehaviorRemark {
+  id: string;
+  studentId: string;
+  studentName: string;
+  date: string;
+  category: 'academic' | 'conduct' | 'punctuality';
+  note: string;
+  parentNotified: boolean;
+}
+
+export interface ParentChild {
+  id: string;
+  name: string;
+  avatar: string;
+  grade: GradeLevel;
+  section: string;
+  rollNumber: string;
+  admissionId: string;
+  dob: string;
+  house: string;
+  classTeacherName: string;
+  classTeacherAvatar: string;
+  classTeacherEmail: string;
+  attendancePercentage: number;
+  gpa: number;
+  feeStatus: 'paid' | 'pending' | 'overdue';
+  pendingFeeAmount: number;
+  unsubmittedAssignments: number;
+  upcomingExamsCount: number;
+  conductRating: string;
+}
+
+export interface ParentTeacherMeeting {
+  id: string;
+  studentId: string;
+  teacherId: string;
+  teacherName: string;
+  teacherAvatar: string;
+  subject: string;
+  requestedDate: string;
+  requestedTime: string;
+  mode: 'in_person' | 'video_call';
+  agenda: string;
+  status: 'confirmed' | 'pending' | 'completed' | 'rescheduled';
+  meetingLink?: string;
+  venue?: string;
+  teacherNotes?: string;
+}
+
+export interface TeacherReview {
+  id: string;
+  teacherId: string;
+  teacherName: string;
+  subject: string;
+  rating: number; // 1-5
+  feedbackText: string;
+  category: 'teaching_quality' | 'communication' | 'supportiveness';
+  submittedAt: string;
+  anonymous: boolean;
+}
+
+export interface StudentDocument {
+  id: string;
+  studentId: string;
+  title: string;
+  category: 'report_card' | 'certificate' | 'fee_receipt' | 'conduct' | 'medical';
+  issueDate: string;
+  fileSize: string;
+  downloadUrl?: string;
+}
+
+export interface TransportDetail {
+  studentId: string;
+  busNumber: string;
+  routeName: string;
+  pickupLocation: string;
+  dropLocation: string;
+  pickupTime: string;
+  dropTime: string;
+  driverName: string;
+  driverPhone: string;
+  status: 'on_schedule' | 'delayed' | 'boarding';
+}
+
+export interface LibraryBookItem {
+  id: string;
+  studentId: string;
+  bookTitle: string;
+  author: string;
+  isbn: string;
+  issueDate: string;
+  dueDate: string;
+  status: 'issued' | 'overdue' | 'returned';
+  fineAmount: number;
+}
+
+export interface ParentLeaveRequest {
+  id: string;
+  studentId: string;
+  studentName: string;
+  startDate: string;
+  endDate: string;
+  reasonCategory: 'sick_leave' | 'family_event' | 'medical_appointment' | 'personal';
+  reasonDetails: string;
+  submittedAt: string;
+  status: 'pending' | 'approved' | 'rejected';
+  teacherRemarks?: string;
+}
+
+export interface ParentSupportTicket {
+  id: string;
+  ticketNumber: string;
+  category: 'academic' | 'billing' | 'transport' | 'technical';
+  subject: string;
+  description: string;
+  priority: 'normal' | 'urgent';
+  createdAt: string;
+  status: 'open' | 'in_progress' | 'resolved';
+  response?: string;
+}
+

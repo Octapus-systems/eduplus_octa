@@ -128,7 +128,7 @@ export const ExamsView: React.FC = () => {
 
         {/* Result Summary Card if submitted */}
         {examResult ? (
-          <div className="bg-white rounded-3xl border border-slate-200 p-8 text-center space-y-5 max-w-xl mx-auto shadow-xl">
+          <div className="bg-white rounded-3xl border border-slate-200 p-8 text-center space-y-6 max-w-xl mx-auto shadow-xl">
             <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
               <Award className="w-8 h-8" />
             </div>
@@ -160,16 +160,52 @@ export const ExamsView: React.FC = () => {
               </div>
             </div>
 
-            <button
-              id="btn-return-exams-list"
-              onClick={() => {
-                setIsTakingExam(false);
-                setExamResult(null);
-              }}
-              className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors"
-            >
-              Return to Exams List
-            </button>
+            {/* Answer key breakdown accordion */}
+            <div className="text-left space-y-3 pt-3 border-t border-slate-100">
+              <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider">Answer Key & Solution Explanations</h4>
+              <div className="space-y-3 max-h-64 overflow-y-auto pr-1">
+                {activeExam.questions.map((q, idx) => {
+                  const userAns = selectedAnswers[q.id];
+                  const isCorrect = userAns === q.correctAnswer;
+                  return (
+                    <div key={q.id} className={`p-3 rounded-xl border text-xs space-y-1.5 ${isCorrect ? 'bg-emerald-50/60 border-emerald-200' : 'bg-rose-50/60 border-rose-200'}`}>
+                      <div className="flex items-center justify-between font-bold">
+                        <span className="text-slate-800">Q{idx + 1}: {q.question}</span>
+                        <span className={`text-[10px] px-2 py-0.5 rounded font-extrabold ${isCorrect ? 'bg-emerald-600 text-white' : 'bg-rose-600 text-white'}`}>
+                          {isCorrect ? 'Correct ✓' : 'Incorrect ✗'}
+                        </span>
+                      </div>
+                      <div className="text-[11px] text-slate-600">
+                        <span>Your Answer: <strong className={isCorrect ? 'text-emerald-700' : 'text-rose-700'}>{userAns !== undefined ? q.options[userAns] : 'Not Answered'}</strong></span>
+                      </div>
+                      {!isCorrect && (
+                        <div className="text-[11px] text-emerald-800 font-semibold">
+                          Correct Option: {q.correctAnswer !== undefined ? q.options[q.correctAnswer] : ''}
+                        </div>
+                      )}
+                      {q.explanation && (
+                        <p className="text-[10px] text-slate-500 italic pt-1 border-t border-slate-200/60">
+                          Explanation: {q.explanation}
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center gap-3 pt-3">
+              <button
+                id="btn-return-exams-list"
+                onClick={() => {
+                  setIsTakingExam(false);
+                  setExamResult(null);
+                }}
+                className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
+              >
+                Return to Exams List
+              </button>
+            </div>
           </div>
         ) : (
           /* Question View & Question Palette Layout */

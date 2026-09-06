@@ -14,6 +14,10 @@ import { AssignmentsView } from './components/student/AssignmentsView';
 import { ExamsView } from './components/student/ExamsView';
 import { ResultsView } from './components/student/ResultsView';
 import { CertificatesView } from './components/student/CertificatesView';
+import { LiveClassesView } from './components/student/LiveClassesView';
+import { StudentAttendanceView } from './components/student/StudentAttendanceView';
+import { StudentFeesView } from './components/student/StudentFeesView';
+import { StudentMessagesView } from './components/student/StudentMessagesView';
 
 // Teacher views
 import { TeacherDashboard } from './components/teacher/TeacherDashboard';
@@ -23,6 +27,8 @@ import { TeacherAssignmentsView } from './components/teacher/TeacherAssignmentsV
 import { QuestionBankView } from './components/teacher/QuestionBankView';
 import { AttendanceView } from './components/teacher/AttendanceView';
 import { TeacherPerformanceView } from './components/teacher/TeacherPerformanceView';
+import { TeacherDoubtsView } from './components/teacher/TeacherDoubtsView';
+import { TeacherLiveStudioView } from './components/teacher/TeacherLiveStudioView';
 
 // Admin views
 import { AdminDashboard } from './components/admin/AdminDashboard';
@@ -32,6 +38,21 @@ import { ClassesCoursesView } from './components/admin/ClassesCoursesView';
 import { ExamManagementView } from './components/admin/ExamManagementView';
 import { FeesManagementView } from './components/admin/FeesManagementView';
 import { ReportsAnalyticsView } from './components/admin/ReportsAnalyticsView';
+
+// Parent views
+import { ParentDashboard } from './components/parent/ParentDashboard';
+import { ChildrenDirectoryView } from './components/parent/ChildrenDirectoryView';
+import { ParentAcademicsView } from './components/parent/ParentAcademicsView';
+import { ParentExamsResultsView } from './components/parent/ParentExamsResultsView';
+import { ParentAssignmentsView } from './components/parent/ParentAssignmentsView';
+import { ParentAttendanceView } from './components/parent/ParentAttendanceView';
+import { ParentFeesView } from './components/parent/ParentFeesView';
+import { ParentTeacherConnectView } from './components/parent/ParentTeacherConnectView';
+import { ParentAIAssistantView } from './components/parent/ParentAIAssistantView';
+import { ParentAchievementsView } from './components/parent/ParentAchievementsView';
+import { ParentEventsTimetableComponents } from './components/parent/ParentEventsTimetableComponents';
+import { ParentDocumentsSupportView } from './components/parent/ParentDocumentsSupportView';
+import { ParentSettingsView } from './components/parent/ParentSettingsView';
 
 // Shared views
 import { AnnouncementsView } from './components/common/AnnouncementsView';
@@ -47,17 +68,61 @@ const MainContent: React.FC = () => {
       case 'dashboard':
         if (currentRole === 'student') return <StudentDashboard />;
         if (currentRole === 'teacher') return <TeacherDashboard />;
+        if (currentRole === 'parent') return <ParentDashboard />;
         return <AdminDashboard />;
+
+      // Parent Tabs
+      case 'parent-dashboard':
+        return <ParentDashboard />;
+      case 'parent-children':
+        return <ChildrenDirectoryView />;
+      case 'parent-academics':
+        return <ParentAcademicsView />;
+      case 'parent-attendance':
+        return <ParentAttendanceView />;
+      case 'parent-assignments':
+        return <ParentAssignmentsView />;
+      case 'parent-exams':
+        return <ParentExamsResultsView />;
+      case 'parent-fees':
+        return <ParentFeesView />;
+      case 'parent-teachers':
+        return <ParentTeacherConnectView />;
+      case 'parent-ai':
+        return <ParentAIAssistantView />;
+      case 'parent-achievements':
+        return <ParentAchievementsView />;
+      case 'parent-events':
+        return <ParentEventsTimetableComponents />;
+      case 'parent-documents':
+        return <ParentDocumentsSupportView />;
+      case 'parent-settings':
+        return <ParentSettingsView />;
       case 'courses':
         return <MyCoursesView />;
       case 'course-player':
         return <CoursePlayerView />;
+      case 'live-classes':
+        if (currentRole === 'teacher') return <TeacherLiveStudioView />;
+        return <LiveClassesView />;
       case 'assignments':
+        if (currentRole === 'teacher') return <TeacherAssignmentsView />;
         return <AssignmentsView />;
       case 'exams':
+        if (currentRole === 'teacher') return <QuestionBankView />;
         return <ExamsView />;
       case 'results':
+        if (currentRole === 'teacher') return <TeacherPerformanceView />;
         return <ResultsView />;
+      case 'student-attendance':
+        if (currentRole === 'teacher') return <AttendanceView />;
+        return <StudentAttendanceView />;
+      case 'student-fees':
+        if (currentRole === 'student') return <StudentDashboard />;
+        return <FeesManagementView />;
+      case 'student-messages':
+        if (currentRole === 'teacher') return <TeacherDoubtsView />;
+        return <StudentMessagesView />;
       case 'certificates':
         return <CertificatesView />;
 
@@ -72,8 +137,12 @@ const MainContent: React.FC = () => {
         return <TeacherAssignmentsView />;
       case 'question-bank':
         return <QuestionBankView />;
+      case 'teacher-live-classes':
+        return <TeacherLiveStudioView />;
       case 'attendance':
         return <AttendanceView />;
+      case 'teacher-doubts':
+        return <TeacherDoubtsView />;
       case 'teacher-performance':
         return <TeacherPerformanceView />;
 

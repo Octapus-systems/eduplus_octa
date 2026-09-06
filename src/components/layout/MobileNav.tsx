@@ -55,12 +55,22 @@ export const MobileNav: React.FC = () => {
     { key: 'admin-settings', label: 'Config', icon: Settings }
   ];
 
+  const parentBottomNav = [
+    { key: 'parent-dashboard', label: 'Home', icon: LayoutDashboard },
+    { key: 'parent-children', label: 'Children', icon: Users },
+    { key: 'parent-academics', label: 'Academics', icon: GraduationCap },
+    { key: 'parent-fees', label: 'Fees', icon: FileCheck2 },
+    { key: 'parent-settings', label: 'Profile', icon: Settings }
+  ];
+
   const bottomItems =
     currentRole === 'student'
       ? studentBottomNav
       : currentRole === 'teacher'
       ? teacherBottomNav
-      : adminBottomNav;
+      : currentRole === 'admin'
+      ? adminBottomNav
+      : parentBottomNav;
 
   return (
     <>
@@ -143,6 +153,12 @@ export const MobileNav: React.FC = () => {
                       My Courses & Videos
                     </button>
                     <button
+                      onClick={() => handleNav('live-classes')}
+                      className="w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100"
+                    >
+                      Live Classes & Timetable
+                    </button>
+                    <button
                       onClick={() => handleNav('assignments')}
                       className="w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100"
                     >
@@ -159,6 +175,18 @@ export const MobileNav: React.FC = () => {
                       className="w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100"
                     >
                       Results & Performance
+                    </button>
+                    <button
+                      onClick={() => handleNav('student-attendance')}
+                      className="w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100"
+                    >
+                      Attendance Record
+                    </button>
+                    <button
+                      onClick={() => handleNav('student-messages')}
+                      className="w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100"
+                    >
+                      Teacher Connect & Q&A
                     </button>
                     <button
                       onClick={() => handleNav('certificates')}
@@ -190,6 +218,12 @@ export const MobileNav: React.FC = () => {
                       Course & Syllabus Management
                     </button>
                     <button
+                      onClick={() => handleNav('teacher-live-classes')}
+                      className="w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100"
+                    >
+                      Live Class Studio
+                    </button>
+                    <button
                       onClick={() => handleNav('video-library')}
                       className="w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100"
                     >
@@ -211,7 +245,13 @@ export const MobileNav: React.FC = () => {
                       onClick={() => handleNav('attendance')}
                       className="w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100"
                     >
-                      Attendance Roll Call
+                      Attendance Roll Call & Remarks
+                    </button>
+                    <button
+                      onClick={() => handleNav('teacher-doubts')}
+                      className="w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100"
+                    >
+                      Student Doubts & Q&A
                     </button>
                     <button
                       onClick={() => handleNav('teacher-performance')}

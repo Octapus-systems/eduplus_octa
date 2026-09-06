@@ -21,7 +21,9 @@ import {
   ChevronRight,
   School,
   Sparkles,
-  Layers
+  Layers,
+  Radio,
+  MessageSquare
 } from 'lucide-react';
 
 export const Sidebar: React.FC = () => {
@@ -43,9 +45,12 @@ export const Sidebar: React.FC = () => {
   const studentNavItems = [
     { key: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { key: 'courses', label: 'My Courses', icon: BookOpen },
+    { key: 'live-classes', label: 'Live Classes & Timetable', icon: Radio },
     { key: 'assignments', label: 'Assignments', icon: FileCheck2 },
     { key: 'exams', label: 'Exams & Quizzes', icon: GraduationCap },
     { key: 'results', label: 'Results & Analytics', icon: BarChart3 },
+    { key: 'student-attendance', label: 'Attendance Record', icon: CalendarCheck2 },
+    { key: 'student-messages', label: 'Teacher Connect', icon: MessageSquare },
     { key: 'certificates', label: 'Certificates', icon: Award },
     { key: 'announcements', label: 'Notice Board', icon: Bell },
     { key: 'settings', label: 'Profile & Settings', icon: Settings }
@@ -53,12 +58,14 @@ export const Sidebar: React.FC = () => {
 
   const teacherNavItems = [
     { key: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { key: 'teacher-courses', label: 'My Courses', icon: BookOpen },
+    { key: 'teacher-courses', label: 'Courses & Lessons', icon: BookOpen },
+    { key: 'teacher-assignments', label: 'Assignments & Homework', icon: FileCheck2 },
+    { key: 'question-bank', label: 'Question Bank & Quizzes', icon: ClipboardList },
+    { key: 'teacher-live-classes', label: 'Live Class Studio', icon: Radio },
+    { key: 'attendance', label: 'Attendance & Remarks', icon: CalendarCheck2 },
+    { key: 'teacher-doubts', label: 'Student Doubts & Q&A', icon: MessageSquare },
+    { key: 'teacher-performance', label: 'Performance & Gradebook', icon: BarChart3 },
     { key: 'video-library', label: 'Video Library', icon: Video },
-    { key: 'teacher-assignments', label: 'Assignments', icon: FileCheck2 },
-    { key: 'question-bank', label: 'Question Bank & Exams', icon: ClipboardList },
-    { key: 'attendance', label: 'Attendance Register', icon: CalendarCheck2 },
-    { key: 'teacher-performance', label: 'Student Performance', icon: BarChart3 },
     { key: 'announcements', label: 'Announcements', icon: Bell },
     { key: 'settings', label: 'Profile & Settings', icon: Settings }
   ];
@@ -75,17 +82,36 @@ export const Sidebar: React.FC = () => {
     { key: 'admin-settings', label: 'Roles & Settings', icon: Settings }
   ];
 
+  const parentNavItems = [
+    { key: 'parent-dashboard', label: 'Parent Dashboard', icon: LayoutDashboard },
+    { key: 'parent-children', label: 'My Children', icon: Users },
+    { key: 'parent-academics', label: 'Academic Performance', icon: BarChart3 },
+    { key: 'parent-attendance', label: 'Attendance Record', icon: CalendarCheck2 },
+    { key: 'parent-assignments', label: 'Assignments', icon: FileCheck2 },
+    { key: 'parent-exams', label: 'Exams & Results', icon: GraduationCap },
+    { key: 'parent-fees', label: 'Fees & Finance', icon: CreditCard },
+    { key: 'parent-teachers', label: 'Teacher Connect & PTA', icon: MessageSquare },
+    { key: 'parent-ai', label: 'AI Parent Companion', icon: Sparkles },
+    { key: 'parent-achievements', label: 'Achievements & Badges', icon: Award },
+    { key: 'parent-events', label: 'Events & Timetable', icon: CalendarCheck2 },
+    { key: 'parent-documents', label: 'Documents & Support', icon: HelpCircle },
+    { key: 'parent-settings', label: 'Parent Settings', icon: Settings }
+  ];
+
   const navItems =
     currentRole === 'student'
       ? studentNavItems
       : currentRole === 'teacher'
       ? teacherNavItems
-      : adminNavItems;
+      : currentRole === 'admin'
+      ? adminNavItems
+      : parentNavItems;
 
   const roleColors = {
     student: 'bg-indigo-500/10 text-indigo-600 border-indigo-200',
     teacher: 'bg-emerald-500/10 text-emerald-600 border-emerald-200',
-    admin: 'bg-purple-500/10 text-purple-600 border-purple-200'
+    admin: 'bg-purple-500/10 text-purple-600 border-purple-200',
+    parent: 'bg-amber-500/10 text-amber-600 border-amber-200'
   }[currentRole];
 
   return (
